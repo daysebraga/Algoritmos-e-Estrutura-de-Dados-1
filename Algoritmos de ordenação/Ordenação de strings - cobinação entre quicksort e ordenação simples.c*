@@ -1,0 +1,75 @@
+/*Implemente uma combinação entre o quicksort e um método de ordenação simples. A função deve, pelo menos, receber três parâmetros: vetor de stings (**vstr),
+tamanho do vetor (n) e um número inteiro representando tamanho mínimo (m). Nessa função, enquanto a partição for maior que m, o método de ordenação que deve ser aplicado é quicksort. 
+  Caso contrário, um método de ordenação simples (bubblesort, select sort ou insert sort) deve ser utilizado na partição.
+
+Input Format
+
+Na primeira linha deve ser lido o tamanho do vetor. A partir segunda linha, devem ser lidos os elementos do vetor. Após a leitura do vetor, 
+deve ser lido um número inteiro que represente o tamanho mínimo de partição.*/
+
+#include <stdio.h>
+#include <string.h>
+#include <math.h>
+#include <stdlib.h>
+
+void ordena(char **v,int num,int esq,int dir,int min){
+    int i=esq,j=dir;
+    char aux[20], pivo[20];
+    
+    strcpy(pivo,v[(esq+dir)/2]);
+    if(dir-esq+1 > min || (num/min)%2==0){
+        
+        do{
+            while(strcmp(v[i],pivo)<0)
+                i++;
+             while(strcmp(v[j],pivo)>0)
+                j--;
+            
+            if(i<=j){
+                strcpy(aux,v[i]);
+                strcpy(v[i],v[j]);
+                strcpy(v[j],aux);
+                i++;
+                j--;
+            }
+        }while(i<=j);
+        
+        if(j>esq)
+            ordena(v,dir-esq,esq,j,min);
+        if(i<dir)
+            ordena(v,dir-esq,i,dir,min);
+    }
+    else{
+        for(i=0;i<num-1;i++){
+            for(j=0;j<num-i-1;j++){
+                if(strcmp(v[j],v[j+1])>0){
+                    strcpy(aux,v[j]);
+                    strcpy(v[j],v[j+1]);
+                    strcpy(v[j+1],aux);
+                }
+                    
+            }
+        }
+    }
+        
+}
+
+int main() {
+    int num,i,min;
+    
+    scanf("%d",&num);
+    char **v = (char**)malloc(sizeof(char*) * num);
+    for(int i = 0; i < num; i++)
+        v[i] = (char*)malloc(sizeof(char) * 20);
+    
+    for(i=0;i<num;i++)
+        scanf("%s",v[i]);
+    
+    scanf("%d",&min);
+    
+    ordena(v,num,0,num-1,min);
+        
+    for(i=0;i<num;i++)
+        printf("%s\n",v[i]);
+    return 0;
+}
